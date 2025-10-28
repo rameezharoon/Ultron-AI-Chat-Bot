@@ -23,10 +23,9 @@ Perfect for personal productivity, basic automation, and conversational assistan
 
 - `main.py` → handles user input, API requests, memory logic
 - `memory.json` → stores important details from conversations
-- `chat_history.json` → stores previous chats with auto-titles
-- `voice.py` / TTS logic → converts replies into speech
 
 ---
 
 ## 📂 Folder Structure
+
 
