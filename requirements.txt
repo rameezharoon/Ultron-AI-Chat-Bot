@@ -1,0 +1,6 @@
+google-generativeai
+Flask
+gTTS
+playsound
+requests
+markupsafe
