@@ -1,8 +1,6 @@
 from flask import Flask, render_template, request, Response, jsonify
 import google.generativeai as genai
-from gtts import gTTS
-from playsound import playsound
-import threading, queue, json, os, re, uuid, time
+import threading, json, os, re, uuid, time, queue
 
 # ======================
 # CONFIGURATION
@@ -46,32 +44,6 @@ def summarize_memory(memory):
     return memory
 
 # ======================
-# TTS QUEUE SYSTEM
-# ======================
-tts_queue = queue.Queue()
-
-def clean_text_for_tts(text):
-    # Remove unwanted characters or symbols for better pronunciation
-    return re.sub(r"[^a-zA-Z0-9\s.,!?']", "", text)
-
-def tts_worker():
-    while True:
-        text = tts_queue.get()
-        if text is None:
-            break
-        clean_text = clean_text_for_tts(text)
-        if clean_text.strip():
-            tts_file = f"static/{uuid.uuid4()}.mp3"
-            tts = gTTS(text=clean_text, lang='en')
-            tts.save(tts_file)
-            playsound(tts_file)
-            os.remove(tts_file)
-        tts_queue.task_done()
-
-# Start background TTS thread
-threading.Thread(target=tts_worker, daemon=True).start()
-
-# ======================
 # STREAMING RESPONSE
 # ======================
 def generate_stream(prompt):
@@ -92,10 +64,9 @@ def generate_stream(prompt):
 
         for chunk in stream:
             if chunk.text:
-                # Clean text: remove extra colons, [Done], or control characters
+                # Clean text
                 piece = chunk.text.strip().lstrip(":").replace("[Done]", "").strip()
                 collected += piece
-                tts_queue.put(piece)
                 yield piece
                 time.sleep(0.02)
 
@@ -120,3 +91,4 @@ def chat_stream():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
