@@ -7,7 +7,7 @@ import re
 # ======================
 # CONFIGURATION
 # ======================
-genai.configure(api_key="AIzaSyDgeCk_emxB_MSfkz9fddXcrg5oHripfao")
+genai.configure(api_key="YOUR_API_KEY")
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 MEMORY_FILE = "memory.json"
@@ -109,3 +109,4 @@ if __name__ == "__main__":
         except Exception as e:
             error_text = f"Sorry, an error occurred -> {e}"
             print("Ultron AI:", error_text)
+
